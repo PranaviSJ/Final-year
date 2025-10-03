@@ -1,31 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Chat</title>
+  <meta charset="UTF-8">
+  <title>AI Courtroom</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    #chatBox {
-      border: 1px solid #ccc;
-      padding: 10px;
-      width: 400px;
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-    .message.user { color: blue; }
-    .message.assistant { color: green; }
-    .message.error { color: red; }
+    section { display: none; }
+    section.active { display: block; }
   </style>
 </head>
 <body>
-  <div id="chatBox"></div>
-  <form id="chatForm">
-    <input type="text" id="userInput" placeholder="Type your message..." />
-    <button type="submit">Send</button>
-  </form>
 
-  <!-- Link external JS -->
-  <script src="script.js"></script>
+  <!-- Signup Section -->
+  <section id="signup" class="active">
+    <div class="container">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+        <p>Already have an account? <a href="#" id="gotoLogin">Login</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Login Section -->
+  <section id="login">
+    <div class="container">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a href="#" id="gotoSignup">Sign up</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Role Selection Section -->
+  <section id="role">
+    <div class="container">
+      <h2>Select Your Role</h2>
+      <form id="roleForm">
+        <button name="role" value="judge" type="submit">I am a Judge</button>
+        <button name="role" value="lawyer" type="submit">I am a Lawyer</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Chat Section -->
+  <section id="chat">
+    <div class="container chat-container">
+      <h2>AI Courtroom Simulation</h2>
+      <div class="chat-box" id="chatBox">
+        <div class="message user">User: Hello, you are a judge in high court. The case is about criminal. Can we start the roleplay?</div>
+        <div class="message assistant">Assistant: Good morning, I am Judge Johnson, and I will be presiding over this case. Please state your name and your position in the case, and then we can proceed with the trial.</div>
+      </div>
+      <form id="chatForm">
+        <input type="text" id="userInput" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    document.getElementById('gotoLogin').addEventListener('click', e => {
+      e.preventDefault();
+      showSection('login');
+    });
+
+    document.getElementById('gotoSignup').addEventListener('click', e => {
+      e.preventDefault();
+      showSection('signup');
+    });
+
+    // Change: Signup goes directly to Role selection
+    document.getElementById('signupForm').addEventListener('submit', e => {
+      e.preventDefault();
+      showSection('role');
+    });
+
+    // Change: Login goes directly to Role selection
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      showSection('role');
+    });
+
+    // Role selection goes to Chat
+    document.getElementById('roleForm').addEventListener('submit', e => {
+      e.preventDefault();
+      showSection('chat');
+    });
+
+    // Chat logic
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.innerText = "User: " + userText;
+      chatBox.appendChild(userMsg);
+
+      // Call backend here (replace '/chat' with your ngrok URL later)
+      const res = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText })
+      });
+
+      const data = await res.json();
+      const assistantMsg = document.createElement("div");
+      assistantMsg.className = "message assistant";
+      assistantMsg.innerText = "Assistant: " + data.reply;
+      chatBox.appendChild(assistantMsg);
+
+      input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  </script>
 </body>
 </html>

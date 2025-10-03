@@ -4,6 +4,7 @@ const chatBox = document.getElementById("chatBox");
 
 const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev";
 
+
 if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

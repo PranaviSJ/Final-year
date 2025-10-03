@@ -2,10 +2,8 @@ const form = document.getElementById("chatForm");
 const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-// ✅ Use your latest ngrok public URL from backend logs here
-const BACKEND_URL = "https://5f59d534a04b.ngrok-free.app";
-
-
+// 🔥 Use your Render backend URL here (example below)
+const BACKEND_URL = "https://final-year-v2ne.onrender.com/"; 
 
 if (form) {
   form.addEventListener("submit", async (e) => {
@@ -13,7 +11,7 @@ if (form) {
     const userText = input.value.trim();
     if (!userText) return;
 
-    // Show user's message in chat box
+    // Show user's message
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.innerText = "User: " + userText;
@@ -43,7 +41,7 @@ if (form) {
       chatBox.appendChild(errorMsg);
     }
 
-    // Reset input and scroll down
+    // Reset input and scroll
     input.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
   });

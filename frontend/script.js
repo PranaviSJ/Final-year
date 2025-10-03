@@ -2,7 +2,7 @@ const form = document.getElementById("chatForm");
 const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-// 🔹 Colab ngrok URL — update every time Colab restarts
+// ✅ Update this every time Colab restarts
 const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev";
 
 if (form) {
@@ -11,7 +11,6 @@ if (form) {
     const userText = input.value.trim();
     if (!userText) return;
 
-    // Display user's message
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.innerText = "User: " + userText;
@@ -30,7 +29,6 @@ if (form) {
 
       const data = await res.json();
 
-      // Display assistant's reply
       const assistantMsg = document.createElement("div");
       assistantMsg.className = "message assistant";
       assistantMsg.innerText = "Assistant: " + data.reply;
@@ -40,7 +38,7 @@ if (form) {
       console.error("Error talking to backend:", error);
       const errorMsg = document.createElement("div");
       errorMsg.className = "message error";
-      errorMsg.innerText = "⚠️ Could not connect to the backend. Make sure your Colab is running.";
+      errorMsg.innerText = "⚠️ Could not connect to the backend.";
       chatBox.appendChild(errorMsg);
     }
 

@@ -2,8 +2,7 @@ const form = document.getElementById("chatForm");
 const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-// 🔥 Use your Render backend URL here (example below)
-const BACKEND_URL = "https://final-year-v2ne.onrender.com/"; 
+const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev";
 
 if (form) {
   form.addEventListener("submit", async (e) => {
@@ -11,14 +10,12 @@ if (form) {
     const userText = input.value.trim();
     if (!userText) return;
 
-    // Show user's message
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.innerText = "User: " + userText;
     chatBox.appendChild(userMsg);
 
     try {
-      // Call backend
       const res = await fetch(`${BACKEND_URL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,7 +24,6 @@ if (form) {
 
       const data = await res.json();
 
-      // Show assistant's reply
       const assistantMsg = document.createElement("div");
       assistantMsg.className = "message assistant";
       assistantMsg.innerText = "Assistant: " + data.reply;
@@ -41,7 +37,6 @@ if (form) {
       chatBox.appendChild(errorMsg);
     }
 
-    // Reset input and scroll
     input.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
   });

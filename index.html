@@ -1,0 +1,33 @@
+// === UPDATE THIS URL WHEN NGROK URL CHANGES ===
+const BASE_URL = "https://fc88ec0373d9.ngrok-free.app";
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const userText = input.value.trim();
+  if (!userText) return;
+
+  const userMsg = document.createElement("div");
+  userMsg.className = "message user";
+  userMsg.innerText = "User: " + userText;
+  chatBox.appendChild(userMsg);
+
+  const assistantMsg = document.createElement("div");
+  assistantMsg.className = "message assistant";
+  assistantMsg.innerText = "Assistant: ";
+  chatBox.appendChild(assistantMsg);
+
+  try {
+    const res = await fetch(`${BASE_URL}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText }),
+    });
+    const data = await res.json();
+    assistantMsg.innerText = "Assistant: " + data.reply;
+  } catch (err) {
+    assistantMsg.innerText = "Assistant: [Error connecting to server]";
+  }
+
+  input.value = "";
+  chatBox.scrollTop = chatBox.scrollHeight;
+});

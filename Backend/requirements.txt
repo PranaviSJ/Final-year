@@ -1,0 +1,5 @@
+flask
+flask-cors
+torch
+bitsandbytes
+git+https://github.com/hiyouga/LLaMA-Factory.git

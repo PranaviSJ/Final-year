@@ -4,7 +4,7 @@ const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
 // 🔹 Replace with your current ngrok URL from Colab
-const BACKEND_URL = "https://65a725c649ee.ngrok-free.app/";
+const BACKEND_URL = "https://42e0fbb12562.ngrok-free.app/";
 
 if (form) {
   form.addEventListener("submit", async (e) => {

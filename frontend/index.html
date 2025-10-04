@@ -1,3 +1,4 @@
+<script src="script.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,69 +65,81 @@
   </section>
 
   <script>
-    function showSection(id) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
+    document.addEventListener("DOMContentLoaded", () => {
 
-    document.getElementById('gotoLogin').addEventListener('click', e => {
-      e.preventDefault();
-      showSection('login');
-    });
+      const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev"; // 🔹 Update this if ngrok URL changes
 
-    document.getElementById('gotoSignup').addEventListener('click', e => {
-      e.preventDefault();
-      showSection('signup');
-    });
+      function showSection(id) {
+        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      }
 
-    // Change: Signup goes directly to Role selection
-    document.getElementById('signupForm').addEventListener('submit', e => {
-      e.preventDefault();
-      showSection('role');
-    });
-
-    // Change: Login goes directly to Role selection
-    document.getElementById('loginForm').addEventListener('submit', e => {
-      e.preventDefault();
-      showSection('role');
-    });
-
-    // Role selection goes to Chat
-    document.getElementById('roleForm').addEventListener('submit', e => {
-      e.preventDefault();
-      showSection('chat');
-    });
-
-    // Chat logic
-    const form = document.getElementById("chatForm");
-    const input = document.getElementById("userInput");
-    const chatBox = document.getElementById("chatBox");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const userText = input.value.trim();
-      if (!userText) return;
-
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.innerText = "User: " + userText;
-      chatBox.appendChild(userMsg);
-
-      // Call backend here (replace '/chat' with your ngrok URL later)
-      const res = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText })
+      document.getElementById('gotoLogin').addEventListener('click', e => {
+        e.preventDefault();
+        showSection('login');
       });
 
-      const data = await res.json();
-      const assistantMsg = document.createElement("div");
-      assistantMsg.className = "message assistant";
-      assistantMsg.innerText = "Assistant: " + data.reply;
-      chatBox.appendChild(assistantMsg);
+      document.getElementById('gotoSignup').addEventListener('click', e => {
+        e.preventDefault();
+        showSection('signup');
+      });
 
-      input.value = "";
-      chatBox.scrollTop = chatBox.scrollHeight;
+      document.getElementById('signupForm').addEventListener('submit', e => {
+        e.preventDefault();
+        showSection('role');
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', e => {
+        e.preventDefault();
+        showSection('role');
+      });
+
+      document.getElementById('roleForm').addEventListener('submit', e => {
+        e.preventDefault();
+        showSection('chat');
+      });
+
+      const form = document.getElementById("chatForm");
+      const input = document.getElementById("userInput");
+      const chatBox = document.getElementById("chatBox");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const userText = input.value.trim();
+        if (!userText) return;
+
+        const userMsg = document.createElement("div");
+        userMsg.className = "message user";
+        userMsg.innerText = "User: " + userText;
+        chatBox.appendChild(userMsg);
+
+        try {
+          const res = await fetch(`${BACKEND_URL}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userText })
+          });
+
+          if (!res.ok) throw new Error("Backend error " + res.status);
+
+          const data = await res.json();
+
+          const assistantMsg = document.createElement("div");
+          assistantMsg.className = "message assistant";
+          assistantMsg.innerText = "Assistant: " + data.reply;
+          chatBox.appendChild(assistantMsg);
+
+        } catch (error) {
+          console.error("Error talking to backend:", error);
+          const errorMsg = document.createElement("div");
+          errorMsg.className = "message error";
+          errorMsg.innerText = "⚠️ Could not connect to the backend.";
+          chatBox.appendChild(errorMsg);
+        }
+
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
     });
   </script>
 </body>

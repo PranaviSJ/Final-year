@@ -1,13 +1,15 @@
+
 const form = document.getElementById("chatForm");
 const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
-// ✅ Update this every time Colab restarts
-const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev";
+// 🔹 Replace with your current ngrok URL from Colab
+const BACKEND_URL = "https://65a725c649ee.ngrok-free.app/";
 
 if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const userText = input.value.trim();
     if (!userText) return;
 
@@ -24,7 +26,7 @@ if (form) {
       });
 
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
       const data = await res.json();
@@ -46,3 +48,4 @@ if (form) {
     chatBox.scrollTop = chatBox.scrollHeight;
   });
 }
+

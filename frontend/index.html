@@ -67,7 +67,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-      const BACKEND_URL = "https://grindable-azucena-nocuous.ngrok-free.dev"; // 🔹 Update this if ngrok URL changes
+      const BACKEND_URL = "https://279c76130044.ngrok-free.app"; // 🔹 Update this if ngrok URL changes
 
       function showSection(id) {
         document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
@@ -126,7 +126,7 @@
 
           const assistantMsg = document.createElement("div");
           assistantMsg.className = "message assistant";
-          assistantMsg.innerText = "Assistant: " + data.reply;
+          assistantMsg.innerText = "Assistant: " + data.response;
           chatBox.appendChild(assistantMsg);
 
         } catch (error) {
